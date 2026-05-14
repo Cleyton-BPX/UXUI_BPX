@@ -1,3 +1,8 @@
+---
+name: variant-designer-lite
+description: Criar variações rápidas e leves de componentes de UI do projeto VAIDEBET 2.0 / VDB (game card, live casino card, event card, botão de odd, banner promocional, card de saldo, componente de carteira, CTA, chip/filtro, tab, alerta, modal simples). Use quando o usuário pedir uma variação simples de componente existente — não usar para redesenho de tela inteira, PRD, backlog, benchmark, design system completo ou decisão estratégica ampla (nesses casos, recomendar o agente completo vdb-ui-agent ou vdb-pm-agent). Responde em formato curto, com no máximo 7 blocos.
+---
+
 # Skill: variant-designer-lite
 
 ## Objetivo
@@ -102,6 +107,39 @@ Escolher um:
 
 Uma ação curta e objetiva.
 
+## Handoff no Figma (opcional, sob demanda)
+
+**Quando acionar:** apenas se o usuário pedir explicitamente algo como "faça o handoff no Figma", "monte as variações no Figma", "sobe pro Figma". Não acionar por iniciativa própria — o default da skill continua sendo entregar **spec textual** (os 7 blocos acima).
+
+**Pré-requisitos antes de chamar `use_figma`:**
+
+1. Carregar a skill MCP `figma-use` (resource `skill://figma/figma-use/SKILL.md`) — obrigatório.
+2. Ter `fileKey` e pelo menos um `nodeId` (fonte ou destino) fornecidos pelo usuário, via URL do Figma.
+3. Validar fontes disponíveis com `listAvailableFontsAsync()` — não assumir que Arial/Inter estão instalados. Substituir por IBM Plex Sans (ou equivalente disponível) quando faltar.
+
+**Fluxo padrão (incremental, máx. 10 ops por chamada):**
+
+1. **Inspeção**: localizar a página do node de destino, capturar `imageHash` da thumbnail do componente fonte (para reuso), listar fontes.
+2. **Container**: criar um auto-layout vertical `[Claude] <Componente> — N Variants — <YYYY-MM-DD>` na página `90 Experiments / Playground` (ou ao lado do node de destino se já estiver lá). Header amarelo VDB, subtítulo cinza-claro com `Source: <nodeId> · Skill: variant-designer-lite · Status: Playground`.
+3. **Skeleton**: row horizontal com N colunas placeholder (`placeholder = true`), cada uma com label + slot de card + nota curta.
+4. **Variantes**: construir cada card em chamada separada de `use_figma`, removendo `placeholder = true` quando concluída.
+5. **Validação**: rodar `get_screenshot` no container e confirmar visualmente — texto cortado, overflow, fundo de row vazado são bugs comuns.
+6. **Retorno**: devolver ao usuário a URL do container + URLs de cada variante + observações (substituição de fonte, ajustes feitos, decisões de trade-off).
+
+**Regras visuais para as variantes:**
+
+- Dark surface `#1A1A1B` como base, hairline amarelo VDB `#FDC300` a 25–35% de opacidade quando precisar destaque.
+- Não usar gradientes amarelos translúcidos como fundo principal — barulho sem benefício.
+- Amarelo VDB reservado para CTA, valores de jackpot/odd e badges úteis. Título do jogo/evento em cinza-claro.
+- Reusar `imageHash` da thumbnail do componente fonte sempre que possível, não criar placeholder genérico.
+- Cada variante deve caber no footprint do node de destino sem truncar texto. Se não couber, reduzir tipografia ou remover elementos secundários (CTA pill, badges) antes de aumentar dimensões.
+
+**Não fazer:**
+
+- Não modificar o componente fonte nem qualquer node fora do container criado.
+- Não criar página nova sem confirmar — usar `90 Experiments / Playground` por padrão.
+- Não publicar nada como componente do Design System nessa skill — apenas Playground. Promoção pra DS exige `vdb-ui-agent`.
+
 ## Regras de comportamento
 
 - Ser direto
@@ -118,6 +156,7 @@ Uma ação curta e objetiva.
 - Sempre separar melhoria visual de melhoria funcional
 - Sempre indicar se a variação deve ficar em Playground, Screens, Review, Handoff Candidate ou Ready for Dev
 - Se o componente puder virar padrão, indicar "candidato ao Design System"
+- Não acionar handoff no Figma por conta própria — apenas quando o usuário pedir explicitamente. Default continua sendo spec textual.
 
 ## Direção visual
 
@@ -194,3 +233,4 @@ Criar uma variação no Figma e comparar com o card atual em uma grade de 6 a 8 
 | É uma variação simples de um componente existente | ✓ Use esta skill |
 | Faltam 2+ informações da entrada esperada | Assumir hipóteses e prosseguir |
 | É apenas cosmético e sem problema claro | Recusar ou questionar brevemente |
+| Usuário pede "faça o handoff", "monte no Figma", "sobe pro Figma" | ✓ Use a seção "Handoff no Figma" |
