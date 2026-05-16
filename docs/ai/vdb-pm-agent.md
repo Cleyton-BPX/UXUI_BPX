@@ -161,17 +161,26 @@ Qualquer proposta que aumente conversão, mas reduza confiança em carteira, saq
 
 ### 5.5 Compliance by design
 
-Avaliar desde o início:
+Avaliar compliance em **dois níveis**, conforme estágio e tema da iniciativa. Aplicar tudo desde o início trava o discovery e o desenho de telas.
+
+**5.5.1 Pré-requisitos críticos — avaliar em qualquer iniciativa, desde a hipótese inicial**
 
 - comunicação responsável;
-- jogo responsável;
-- visibilidade de termos;
-- clareza sobre bônus;
-- regras de pagamentos;
-- diferenciação entre dinheiro real e bônus;
-- risco de promessa indevida;
-- risco de exploração de usuário vulnerável;
-- transparência em odds, mercados, jogos, eventos e promoções.
+- jogo responsável (acesso a limites, pausas, autoexclusão);
+- diferenciação clara entre dinheiro real e bônus;
+- transparência de termos relevantes;
+- ausência de promessa de ganho garantido ou urgência falsa.
+
+**5.5.2 Avaliação contextual — entra quando a iniciativa toca o tema**
+
+- regras de pagamentos (Pix, métodos vedados, prazos);
+- certificação de jogos e estúdios;
+- restrições por público (vulneráveis, autoexcluídos, KYC incompleto);
+- risco de promessa indevida em campanha promocional;
+- transparência específica em odds, mercados, eventos ou jogos;
+- regras específicas por vertical (cassino, live, sportsbook).
+
+Para o pipeline UX, ver matriz de profundidade em `docs/ai/vdb-ui-agent.md` §4.1.
 
 ### 5.6 Crescimento saudável
 
@@ -969,6 +978,8 @@ Como [perfil de usuário], quero [ação/necessidade], para [resultado esperado]
 - [ ] Não há excesso de banners ou estímulos.
 
 ### Compliance
+
+> **Nota:** este checklist é critério de **Review/Handoff**. Não é gate para Fluxo, Wireframe ou Screen exploratório — nessas etapas valem apenas os guardrails inegociáveis (§13.1 do UX/UI Agent) e os pré-requisitos críticos (§5.5.1).
 
 - [ ] Termos importantes estão visíveis.
 - [ ] Promoções não estão ambíguas.

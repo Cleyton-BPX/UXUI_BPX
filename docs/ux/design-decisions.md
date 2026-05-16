@@ -66,6 +66,8 @@ Os agentes devem consultar este arquivo antes de propor mudanças em fluxos, tel
 | DD-016 | Briefing estratégico do redesign VDB | Proposta | 2026-05-13 |
 | DD-017 | Product Management Agent para VDB | Proposta | 2026-05-13 |
 | DD-018 | VDB como plataforma híbrida de iGaming | Proposta | 2026-05-13 |
+| DD-019 | Profundidade contextual de compliance no pipeline UX | Proposta | 2026-05-16 |
+| DD-020 | Handoff em três níveis de fidelidade | Proposta | 2026-05-16 |
 
 ---
 
@@ -768,6 +770,94 @@ Evitar dois erros estratégicos:
 ### Riscos ou observações
 
 Toda mudança que aumente visibilidade de esporte deve monitorar impacto em retenção de cassino, uso de favoritos/recentes, conversão de carteira, suporte e jogo responsável.
+
+---
+
+## DD-019 — Profundidade contextual de compliance no pipeline UX
+
+**Data:** 2026-05-16  
+**Status:** Proposta  
+**Responsável:** UX/UI e Produto  
+**Relacionado a:** `docs/ai/vdb-ui-agent.md`, `docs/ai/vdb-pm-agent.md`, pipeline de maturidade, governança de compliance
+
+### Contexto
+
+A aplicação uniforme de todos os checklists, estados e guardrails de compliance em qualquer etapa do pipeline (Fluxo, Wireframes, Screens, Review, Handoff) trava a criação. Wireframe inicial é forçado a passar pelo mesmo escrutínio de Ready for Dev, e toda tela é forçada a prever 22 estados, mesmo quando não toca carteira, KYC, RG ou promoções.
+
+### Decisão
+
+Adotar profundidade de checagem **contextual**, baseada em duas dimensões:
+
+1. **Etapa do pipeline** — cruzar pipeline com nível de checagem (matriz em §4.1 do UX/UI Agent).
+2. **Tema da tela** — estados críticos iGaming só se aplicam quando a tela toca a vertical correspondente (§9.3 do UX/UI Agent).
+
+Guardrails são separados em:
+
+- **Inegociáveis** (§13.1) — valem em qualquer etapa, inclusive Fluxo/Wireframe.
+- **Contextuais** (§13.2) — entram quando a tela toca o tema.
+
+Compliance by design (PM Agent §5.5) é separado em:
+
+- **Pré-requisitos críticos** (§5.5.1) — avaliar em qualquer iniciativa.
+- **Avaliação contextual** (§5.5.2) — entra quando a iniciativa toca o tema.
+
+### Motivo
+
+A regulação e o jogo responsável continuam estruturais. O que muda é **onde** e **quando** a checagem completa é exigida. Concentrar checklist completo em Review/Handoff protege a regulação sem transformar todo wireframe em auditoria.
+
+### Impacto
+
+- Wireframes e telas exploratórias passam por guardrails inegociáveis apenas.
+- Screens recebem checagem contextual se tocam carteira, KYC, RG, promoções, odds.
+- Review e Handoff seguem com checklist completo + validação externa.
+- Estados de tela são escolhidos em três camadas: base, expandidos, críticos iGaming.
+- Agentes (UX/UI e PM) devem aplicar a matriz, não checagem universal.
+
+### Riscos ou observações
+
+- Risco: rotular uma tela como "não toca o tema" e perder uma checagem necessária. Mitigação: revisão obrigatória em Review independente do julgamento de tema.
+- Decisões anteriores que implicavam aplicação universal de compliance ficam sobrepostas por esta, sem precisar marcá-las como `Substituída`, pois eram leitura interpretativa e não decisão explícita.
+
+---
+
+## DD-020 — Handoff em três níveis de fidelidade
+
+**Data:** 2026-05-16  
+**Status:** Proposta  
+**Responsável:** UX/UI  
+**Relacionado a:** `docs/ai/vdb-ui-agent.md` §14, pipeline de Handoff, DD-004, DD-007
+
+### Contexto
+
+Pedidos de "handoff" hoje são tratados de forma única, mas a entrega real varia conforme o estágio. Handoff em wireframe não exige a mesma profundidade de handoff em UI final. A ausência dessa distinção empurra todo pedido para o nível mais alto, gerando retrabalho e compliance excessivo em etapas iniciais.
+
+### Decisão
+
+Todo pedido de handoff deve começar pela pergunta de fidelidade. Três níveis:
+
+| Nível | Entregável | Página Figma | Compliance |
+|---|---|---|---|
+| Baixa | Estrutura, hierarquia, conteúdo essencial | `05 Wireframes` | Apenas guardrails inegociáveis |
+| Média | Estrutura + componentes identificados + estados-base | `03 Screens` ou `06 Review` | Inegociáveis + contextuais quando aplicável |
+| Alta | Componentes separados prontos para dev, estados completos, regras, critérios de aceite | `07 Handoff > Ready for Dev` | Checklist completo + validação externa |
+
+Para handoff de componente individual, o agente coleta contexto, sugere estados de comportamento por tipo × vertical (matriz em §14.3 do UX/UI Agent), valida com o usuário e gera spec usando o template §14.4.
+
+### Motivo
+
+Separar handoff por fidelidade reduz fricção em etapas exploratórias, mantém rigor em Ready for Dev e dá clareza sobre o que cada nível entrega. Componentes ganham especificação consistente com sugestão automatizada de estados, evitando esquecimento de estados críticos iGaming.
+
+### Impacto
+
+- Agente passa a perguntar fidelidade antes de qualquer handoff.
+- Apenas nível Alta entra em `Ready for Dev` (consistente com DD-004).
+- Templates de handoff (tela e componente) ficam padronizados em §14.4 e §14.5 do UX/UI Agent.
+- Estados de componente são sugeridos por matriz contextual e validados antes da entrega final.
+
+### Riscos ou observações
+
+- Risco: usuário pedir "handoff alta" para um componente que ainda está em exploração, pulando Review. Mitigação: agente sinaliza maturidade insuficiente e recomenda Review primeiro.
+- Componentes existentes já entregues sem essa estrutura não precisam ser refeitos retroativamente, apenas novos handoffs seguem o padrão.
 
 ---
 
